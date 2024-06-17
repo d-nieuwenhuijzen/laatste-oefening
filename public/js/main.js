@@ -35,15 +35,16 @@ function icecreamCard(icecream) {
 }
 
 function createCharts(icecreams) {
+    console.log(icecreams)
 
-    let labels = [];
-    let data = [];
+    const labels = [];
+    const data = [];
     for (let i = 0; i < icecreams.length; i++) {
         const icecream = icecreams[i];
         labels.push(icecream.icecream);
         data.push(icecream.price)
     }
-    createChart(chart, 'bar', labels, data )
+    createChart(chart, 'bar', labels, data);
 }
 
 function createChart(canvas, type, labels, data) {
@@ -52,7 +53,7 @@ function createChart(canvas, type, labels, data) {
         data: {
             labels: labels,
             datasets: [{
-                label: label,
+                label: '',
                 data: data,
                 borderWidth: 1
             }]
@@ -65,8 +66,7 @@ function createChart(canvas, type, labels, data) {
             }
         }
     });
-}
-
+}   
 submitButton.addEventListener('click', function (e) {
     //met preventDefault stoppen we het default submitten van het HTML formulier (we voeren zelf de POST uit)
     e.preventDefault();
