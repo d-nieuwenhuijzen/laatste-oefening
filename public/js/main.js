@@ -3,6 +3,7 @@ const inputName = document.querySelector(".input-name");
 const inputDescription = document.querySelector(".input-description");
 const inputPrice = document.querySelector(".input-price");
 const submitButton = document.querySelector(".submit-button");
+const chart = document.querySelector('.chart-example');
 
 fetch('/icecreams')
 .then(myData => myData.json())
@@ -10,6 +11,7 @@ fetch('/icecreams')
 
 function showIcecreams(icecreams) {
     console.log(icecreams);
+    createCharts(icecreams);
     let htmlCode = '';
     for (let i = 0; i < icecreams.length; i++) {
         const icecream = icecreams[i];
@@ -30,6 +32,39 @@ function icecreamCard(icecream) {
             </div>
         </div>`;
     return card;
+}
+
+function createCharts(icecreams) {
+
+    let labels = [];
+    let data = [];
+    for (let i = 0; i < icecreams.length; i++) {
+        const icecream = icecreams[i];
+        labels.push(icecream.icecream);
+        data.push(icecream.price)
+    }
+    createChart(chart, 'bar', labels, data )
+}
+
+function createChart(canvas, type, labels, data) {
+    new Chart(canvas, {
+        type: type,
+        data: {
+            labels: labels,
+            datasets: [{
+                label: label,
+                data: data,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
 }
 
 submitButton.addEventListener('click', function (e) {
@@ -66,4 +101,3 @@ submitButton.addEventListener('click', function (e) {
     })();
 
 });
-            

@@ -5,17 +5,15 @@ import { MongoClient } from 'mongodb';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 
-
-
 const app = express();
 const port = 3000;
 //lees de connection string uit de environment file
 const databaseUrl = process.env.CONNECTION_URL;
 const client = new MongoClient(databaseUrl);
 
+app.use(express.static('public'));
 app.use(cors());
 app.use(bodyParser.json())
-app.use(express.static('public'));
 //op de / route geven we de documenten terug uit de MongoDB database
 app.get('/icecreams', (req, res) => {
     //fetchDocuments() is een async functie dus zullen we met then() moeten werken
@@ -48,7 +46,7 @@ async function fetchIcecreams() {
     }
 }
 
-async function insertDocument(name, description, price) {
+async function insertIcecream(name, description, price) {
     try {
         // we verbinden de client met de server
         await client.connect();
@@ -76,5 +74,6 @@ app.post('/add-icecream', (req, res) => {
     const description = req.body.description;
     const price = req.body.price;
     //de insertDocument functie wordt aangeroepen en daarna wordt er een JSON object naar de browser gestuurd met success: true
-    insertDocument(name, description, price).then(res.send({ icecreamAdded: true }));
+    insertIcecream(name, description, price).then(res.send({ icecreamAdded  : true }));
 });
+                
