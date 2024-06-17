@@ -47,3 +47,34 @@ async function fetchIcecreams() {
         await client.close();
     }
 }
+
+async function insertDocument(name, description, price) {
+    try {
+        // we verbinden de client met de server
+        await client.connect();
+        //hier verbinden we met de database, je moet nog wel een naam invullen
+        const database = client.db('laatste-oefening');
+        //hier verbinden we met de collectie, je moet nog wel een naam invullen
+        const collection = database.collection('icecream');
+
+        //het document wordt opgeslagen met insertOne
+        await collection.insertOne({
+            icecream: name,
+            description: description,
+            price: price
+        });
+    } finally {
+        //we zorgen ervoor dat aan het einde de database verbinding weer wordt gesloten
+        await client.close();
+    }
+}
+
+//de /add-user url wordt aangeroepen met een POST en de email en password worden meegestuurd
+app.post('/add-icecream', (req, res) => {
+    //de email en het password worden uit de body gelezen (let op dat je body-parser gebruikt)
+    const name = req.body.icecream;
+    const description = req.body.description;
+    const price = req.body.price;
+    //de insertDocument functie wordt aangeroepen en daarna wordt er een JSON object naar de browser gestuurd met success: true
+    insertDocument(name, description, price).then(res.send({ icecreamAdded: true }));
+});
